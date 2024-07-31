@@ -16,10 +16,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@useCase": path.resolve(__dirname, "./src/useCase"),
-      "@lib": path.resolve(__dirname, "./src/lib"),
-      "@interface": path.resolve(__dirname, "./src/interface"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@interface": path.resolve(__dirname, "./src/interface"),
+      "@lib": path.resolve(__dirname, "./src/lib"),
+      "@styles": path.resolve(__dirname, "./src/styles"),
+      "@useCase": path.resolve(__dirname, "./src/useCase"),
     },
   },
 });

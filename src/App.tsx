@@ -1,13 +1,18 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useRef } from "react";
+
+import Item from "@components/Item";
+import Search from "@components/Search";
 
 import Recipe from "@interface/recipe";
+
+import styles from "@styles/index.module.css";
 
 interface InitialState {
   data: Array<Recipe>;
   error: string;
   page: number;
   keyword: string;
-  loading: boolean;
+  loading: "" | "loading" | "more";
 }
 
 interface ActionState {
@@ -20,7 +25,7 @@ const initialState: InitialState = {
   error: "",
   page: 0,
   keyword: "",
-  loading: true,
+  loading: "loading",
 };
 
 const reducer = (state: InitialState, action: ActionState) => {
@@ -36,26 +41,60 @@ const reducer = (state: InitialState, action: ActionState) => {
 };
 
 const App = () => {
+  const abortRef = useRef<AbortController | null>(null);
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const _onFetch = async () => {
-      const { page, keyword } = state;
+      abortRef.current = new AbortController();
+      const { page, keyword, data } = state;
 
       const { default: GetRecipe } = await import("@useCase/GetRecipe");
-      const response = await GetRecipe({ page, limit: 20, keyword });
-      dispatch({ type: "setData", payload: { ...response, loading: false } });
+      const response = await GetRecipe(
+        { page, limit: 20, keyword },
+        abortRef.current.signal,
+        data,
+      );
+      dispatch({ type: "setData", payload: { ...response, loading: "" } });
+      abortRef.current = null;
     };
-    if (state.loading) {
+    if (state.loading && !abortRef.current) {
       _onFetch();
     }
   }, [state.loading]);
 
+  const _onLoadMore = () => {
+    dispatch({
+      type: "setData",
+      payload: { page: state.page + 1, loading: "more" },
+    });
+  };
+
+  const _onSearch = (keyword: string) => {
+    dispatch({
+      type: "setData",
+      payload: { keyword, loading: "loading", data: [] },
+    });
+  };
+
   return (
-    <main>
-      <section>Header</section>
-      <section>Filter</section>
-      {state.loading ? <span>Loading...</span> : <section>Data</section>}
+    <main className={styles.container}>
+      <section>
+        <h1>Recipe Dictionary</h1>
+      </section>
+      <section>
+        <Search onSearch={_onSearch} />
+      </section>
+      <section className={styles.dataContainer} data-state={state.loading}>
+        <div>
+          {state.loading === "loading" ? (
+            <span>Loading...</span>
+          ) : (
+            state.data.map((item: Recipe) => <Item key={item.id} {...item} />)
+          )}
+        </div>
+        {!state.loading && <button onClick={_onLoadMore}>Load More</button>}
+      </section>
     </main>
   );
 };

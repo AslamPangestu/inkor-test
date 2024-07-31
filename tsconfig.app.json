@@ -4,9 +4,10 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@useCase/*": ["src/useCase/*"],
       "@interface/*": ["src/interface/*"],
       "@lib/*": ["src/lib/*"],
+      "@styles/*": ["src/styles/*"],
+      "@useCase/*": ["src/useCase/*"],
     },
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
