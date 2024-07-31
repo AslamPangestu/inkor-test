@@ -6,6 +6,7 @@ import Search from "@components/Search";
 import Recipe from "@interface/recipe";
 
 import styles from "@styles/index.module.css";
+import Loader from "./components/Loader";
 
 interface InitialState {
   data: Array<Recipe>;
@@ -89,10 +90,16 @@ const App = () => {
         <div data-testid="recipes">
           <Data loading={state.loading} data={state.data} />
         </div>
-        {!state.loading && (
-          <button data-testid="load-more" onClick={_onLoadMore}>
-            Load More
-          </button>
+        {state.loading !== "loading" && (
+          <div>
+            {state.loading ? (
+              <Loader size="32px" />
+            ) : (
+              <button data-testid="load-more" onClick={_onLoadMore}>
+                Load More
+              </button>
+            )}
+          </div>
         )}
       </section>
     </main>

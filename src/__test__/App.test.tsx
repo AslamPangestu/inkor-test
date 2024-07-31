@@ -52,15 +52,6 @@ describe("App Component", () => {
     expect(items.length).toBe(results.length);
   });
 
-  it("should load more", async () => {
-    render(<App />);
-    const button = await screen.findByTestId("load-more");
-    fireEvent.click(button);
-
-    const items = await screen.findAllByTestId("title-recipe");
-    expect(items.length).toBe([...results, ...results].length);
-  });
-
   it("should search", async () => {
     render(<App />);
     const input = screen.getByTestId("search-bar");
@@ -71,6 +62,16 @@ describe("App Component", () => {
 
     const items = await screen.findAllByTestId("title-recipe");
     expect(items.length).toBe(results.length);
+  });
+
+  it("should load more", async () => {
+    render(<App />);
+    const button = await screen.findByTestId("load-more");
+    fireEvent.click(button);
+
+    await screen.findByTestId("title-recipe");
+    const items = await screen.findAllByTestId("title-recipe");
+    expect(items.length).toBe([...results, ...results].length);
   });
 
   it("should fetch error", async () => {

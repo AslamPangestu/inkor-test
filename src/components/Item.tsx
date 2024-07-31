@@ -6,9 +6,29 @@ const Container = styled("article")`
   display: flex;
   flex-direction: column;
 
-  & > img {
-    width: 100px;
-    height: 100px;
+  & > div:first-of-type {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 0.5rem;
+
+    & > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition:
+        transform 1s,
+        filter 2s ease-in-out;
+
+      :hover {
+        transform: scale(1.5);
+      }
+    }
+  }
+
+  & > .title-recipe {
+    font-weight: bold;
+    font-size: 1.25rem;
   }
 
   & > p {
@@ -17,12 +37,15 @@ const Container = styled("article")`
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
+    font-size: 1rem;
   }
 `;
 
 const Item = ({ credits, description, name, thumbnail_url }: Recipe) => (
   <Container>
-    <img data-testid="image-recipe" src={thumbnail_url} alt={name} />
+    <div>
+      <img data-testid="image-recipe" src={thumbnail_url} alt={name} />
+    </div>
     <span data-testid="title-recipe" className="title-recipe">
       {name}
     </span>
