@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-import Recipe from "@/interface/recipe";
+import Recipe from "@interface/recipe";
 
 const Container = styled("article")`
   display: flex;
@@ -22,15 +22,19 @@ const Container = styled("article")`
 
 const Item = ({ credits, description, name, thumbnail_url }: Recipe) => (
   <Container>
-    <img src={thumbnail_url} alt={name} />
-    <span className="title-recipe">{name}</span>
-    <span className="createdby-recipe">
-      Created By:
+    <img data-testid="image-recipe" src={thumbnail_url} alt={name} />
+    <span data-testid="title-recipe" className="title-recipe">
+      {name}
+    </span>
+    <div data-testid="createdby-recipe" className="createdby-recipe">
+      Created By:{" "}
       {credits.map((credit, index) => {
         return `${credit?.name || "-"}${index < credits.length - 1 ? ", " : ""}`;
       })}
-    </span>
-    <p>{description ? description : "No Description provided"}</p>
+    </div>
+    <p data-testid="description-recipe">
+      {description ? description : "No Description provided"}
+    </p>
   </Container>
 );
 

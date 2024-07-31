@@ -1,6 +1,13 @@
 import styled from "@emotion/styled";
 
-interface Props {
+interface FormElements extends HTMLFormControlsCollection {
+  keyword: HTMLInputElement;
+}
+interface Form extends HTMLFormElement {
+  readonly elements: FormElements;
+}
+
+export interface Props {
   onSearch: (keyword: string) => void;
 }
 
@@ -19,15 +26,17 @@ const Container = styled("form")`
 `;
 
 const Search = ({ onSearch }: Props) => {
-  const _onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const _onSubmit = (event: React.FormEvent<Form>) => {
     event.preventDefault();
-    onSearch(((event.target as HTMLFormElement)[0] as HTMLInputElement).value);
+    onSearch(event.currentTarget.elements.keyword.value);
   };
 
   return (
-    <Container onSubmit={_onSubmit}>
-      <input name="keyword" type="search" />
-      <button>Search</button>
+    <Container data-testid="form" onSubmit={_onSubmit}>
+      <input data-testid="search-bar" name="keyword" type="search" />
+      <button data-testid="submit" type="submit">
+        Search
+      </button>
     </Container>
   );
 };

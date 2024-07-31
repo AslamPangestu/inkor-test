@@ -1,5 +1,5 @@
-interface Credit {
-  name: string;
+export interface Credit {
+  name: string | null;
   type: string;
 }
 interface Recipe {

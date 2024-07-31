@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef } from "react";
 
-import Item from "@components/Item";
+import Data from "@components/Data";
 import Search from "@components/Search";
 
 import Recipe from "@interface/recipe";
@@ -86,14 +86,14 @@ const App = () => {
         <Search onSearch={_onSearch} />
       </section>
       <section className={styles.dataContainer} data-state={state.loading}>
-        <div>
-          {state.loading === "loading" ? (
-            <span>Loading...</span>
-          ) : (
-            state.data.map((item: Recipe) => <Item key={item.id} {...item} />)
-          )}
+        <div data-testid="recipes">
+          <Data loading={state.loading} data={state.data} />
         </div>
-        {!state.loading && <button onClick={_onLoadMore}>Load More</button>}
+        {!state.loading && (
+          <button data-testid="load-more" onClick={_onLoadMore}>
+            Load More
+          </button>
+        )}
       </section>
     </main>
   );
